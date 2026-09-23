@@ -8,5 +8,15 @@
     "date": "2026-09-04",
     "image": "images/coaching-lead-backpacks.jpg",
     "featured": true
-  }
+  },
+     {
+     "id": "apc-students-wing-adeleye-visit-2026",
+     "title": "APC Remo North Campaign Council Inaugurated, Students Wing Pays Solidarity Visit to Adeleye",
+     "excerpt": "Newly recognized Students Wing pays a courtesy visit to House of Assembly candidate Hon. Adebiyi Adeleye following the campaign council's inauguration.",
+     "category": "Politics",
+     "author": "Community Desk",
+     "date": "2026-09-22",
+     "image": "images/apc-students-wing-lead.jpg",
+     "featured": false
+   }
 ]
