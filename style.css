@@ -288,7 +288,15 @@ main {
   font-size: 0.85rem;
   padding: 1.5rem;
 }
+.advertise-line {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+}
 
+.advertise-line a {
+  color: var(--gold);
+  text-decoration: underline;
+}
 /* Focus visibility */
 a:focus-visible {
   outline: 2px solid var(--gold);
