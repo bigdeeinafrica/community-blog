@@ -80,7 +80,7 @@ function renderArticle(post) {
         <div class="gallery">
           ${post.gallery.map(item => `
             <figure>
-              <img src="${item.src}" alt="${item.caption || ''}" loading="lazy" />
+              <img src="${item.src}" alt="${item.caption || ''}" loading="lazy" class="gallery-thumb" data-full="${item.src}" data-caption="${item.caption || ''}" />
               <figcaption>${item.caption || ''}</figcaption>
             </figure>
           `).join('')}
@@ -93,6 +93,34 @@ function renderArticle(post) {
 
   const shareButton = document.getElementById('share-button');
   shareButton.addEventListener('click', () => handleShare(shareButton.dataset.url, shareButton.dataset.title));
+
+  document.querySelectorAll('.gallery-thumb').forEach(img => {
+    img.addEventListener('click', () => openLightbox(img.dataset.full, img.dataset.caption));
+  });
+}
+
+function openLightbox(src, caption) {
+  const overlay = document.createElement('div');
+  overlay.className = 'lightbox-overlay';
+  overlay.innerHTML = `
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <img src="${src}" alt="${caption || ''}" />
+    ${caption ? `<p class="lightbox-caption">${caption}</p>` : ''}
+  `;
+
+  const close = () => overlay.remove();
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  overlay.querySelector('.lightbox-close').addEventListener('click', close);
+  document.addEventListener('keydown', function onKey(e) {
+    if (e.key === 'Escape') {
+      close();
+      document.removeEventListener('keydown', onKey);
+    }
+  });
+
+  document.body.appendChild(overlay);
 }
 
 async function handleShare(url, title) {
