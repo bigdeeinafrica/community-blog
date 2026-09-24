@@ -38,7 +38,7 @@ const sitemapUrls = [`${SITE_URL}/`];
 
 index.forEach(entry => {
   const post = JSON.parse(fs.readFileSync(path.join(postsDir, `${entry.id}.json`), 'utf8'));
-  const url = `${SITE_URL}/post/${post.id}.html`;
+  const url = `${SITE_URL}/post/${post.id}`;
   const image = toAbsoluteUrl(post.image);
   const description = post.excerpt || (post.body && post.body[0]) || '';
 
