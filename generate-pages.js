@@ -20,6 +20,15 @@ function formatDate(iso) {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+// Always turn a stored image path (e.g. "images/photo.jpg") into a full
+// absolute URL, so it works the same whether it's used in <img src>,
+// og:image, or twitter:image — no matter which folder the HTML file sits in.
+function toAbsoluteUrl(src) {
+  if (!src) return '';
+  if (src.startsWith('http')) return src;
+  return `${SITE_URL}/${src.replace(/^\//, '')}`;
+}
+
 const postsDir = path.join(__dirname, 'posts');
 const outDir = path.join(__dirname, 'post');
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir);
@@ -30,17 +39,20 @@ const sitemapUrls = [`${SITE_URL}/`];
 index.forEach(entry => {
   const post = JSON.parse(fs.readFileSync(path.join(postsDir, `${entry.id}.json`), 'utf8'));
   const url = `${SITE_URL}/post/${post.id}.html`;
-  const image = post.image.startsWith('http') ? post.image : `${SITE_URL}/${post.image.replace(/^\//, '')}`;
+  const image = toAbsoluteUrl(post.image);
   const description = post.excerpt || (post.body && post.body[0]) || '';
 
   const galleryHtml = post.gallery ? `
     <div class="gallery">
-      ${post.gallery.map(item => `
+      ${post.gallery.map(item => {
+        const itemSrc = toAbsoluteUrl(item.src);
+        return `
         <figure>
-          <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.caption || '')}" loading="lazy" class="gallery-thumb" data-full="${escapeHtml(item.src)}" data-caption="${escapeHtml(item.caption || '')}" />
+          <img src="${escapeHtml(itemSrc)}" alt="${escapeHtml(item.caption || '')}" loading="lazy" class="gallery-thumb" data-full="${escapeHtml(itemSrc)}" data-caption="${escapeHtml(item.caption || '')}" />
           <figcaption>${escapeHtml(item.caption || '')}</figcaption>
         </figure>
-      `).join('')}
+      `;
+      }).join('')}
     </div>
   ` : '';
 
@@ -58,6 +70,7 @@ index.forEach(entry => {
 <meta property="og:description" content="${escapeHtml(description)}" />
 <meta property="og:url" content="${url}" />
 <meta property="og:image" content="${image}" />
+<meta property="og:image:secure_url" content="${image}" />
 <meta property="og:site_name" content="Remo North Today" />
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -84,7 +97,7 @@ index.forEach(entry => {
     ${post.subtitle ? `<p class="subtitle">${escapeHtml(post.subtitle)}</p>` : ''}
     <p class="byline">${escapeHtml(post.author)} &middot; ${formatDate(post.date)}${post.location ? ' &middot; ' + escapeHtml(post.location) : ''}</p>
     ${post.poweredBy ? `<p class="powered-by">${escapeHtml(post.poweredBy)}</p>` : ''}
-    <img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.title)}" />
+    <img src="${escapeHtml(image)}" alt="${escapeHtml(post.title)}" />
     ${post.imageCaption ? `<p class="image-caption">${escapeHtml(post.imageCaption)}</p>` : ''}
     <div class="body">
       ${post.body.map(p => `<p>${escapeHtml(p)}</p>`).join('')}
