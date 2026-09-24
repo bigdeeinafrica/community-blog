@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://community-blog-mu.vercel.app/sitemap.xml

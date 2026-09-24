@@ -39,14 +39,14 @@ function renderHome(posts) {
       <p class="excerpt">${featured.excerpt}</p>
       <p class="byline">${featured.author} &middot; ${formatDate(featured.date)}</p>
       <img src="${featured.image}" alt="${featured.title}" />
-      <a class="read-link" href="#/post/${featured.id}">Read the full story</a>
+      <a class="read-link" href="post/${featured.id}.html">Read the full story</a>
     </article>
   `;
 
   const restHtml = rest.length === 0 ? '' : `
     <h2 class="story-list-heading">More stories</h2>
     ${rest.map(p => `
-      <a class="story-item" href="#/post/${p.id}">
+      <a class="story-item" href="post/${p.id}.html">
         <span class="marker category-${p.category}"></span>
         <span class="content">
           <h2>${p.title}</h2>
